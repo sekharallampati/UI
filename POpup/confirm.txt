@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .showcss{ display:block;;}
+  .hidecss{ display:none;}
+</style>
+  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+ 
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+<script>
+function ShowYesNoMessage(title, message) {
+var def = $.Deferred();
+$("#infoMessage").html(message);
+
+$("#dialog_infoMessage").dialog({
+    modal: true,
+    title: title,
+    buttons: {
+        Yes: function () {
+            $("#infoMessage").html("");
+            $(this).dialog("close");
+            def.resolve("Yes");
+        },
+        No: function () {
+            $("#infoMessage").html("");
+            $(this).dialog("close");
+            def.resolve("No");
+        }
+    }
+});
+return def.promise();
+}
+
+window.du = function(){
+$.when(ShowYesNoMessage("Are you sure", "hh")).then(
+            function(status) {
+                if (status == "Yes") {
+                    return true;
+                } else
+				{
+				return false;
+				}
+            }
+        );
+};
+			
+function confirmIt(text, okFunc, cancelFunc) {
+   $('#confirm_dialog').dialog({
+	
+      width: 300,
+      height: 150,
+      buttons: {
+         "OK": okFunc,
+         "Cancel": cancelFunc
+      }
+   });
+}
+window.demmu = function(){
+confirmIt('Are you sure you want to press OK?', function(){
+$(this).dialog(close);
+    alert("sucess");
+}, function(){
+    alert("failure");
+});
+};
+
+</script>
+</head>
+<body>
+        <div id="dialog_infoMessage" title="Alert message" style="display: none">
+        <div id="infoMessage">
+
+        </div>
+        </div>
+
+        <div id="confirm_dialog" title="Alert message" style="display: none">
+
+        </div>
+    <input type="button" onclick="du()" id ="btnTest" value="Test"/>
+        
+
+<input type="button" value="test" onclick="demmu()">
+<a  onclick="du()" name='lnkViews' href="https://www.google.com">  title</a>
+
+
+
+</body>
+</html>
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+ 
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+  <script>
+window.test = function () {
+var s=false;
+    var btn1 = "<br><br><input type='button' class='button' value='OK' x-data='true'>"
+    var btn2 = "<br><br><input type='button' class='button' value='CANCEL' x-data='false'>"
+    ShowDialog(false, "Test", btn1 + btn2, undefined, function(result){
+        alert(result);
+		s=result;
+    })
+	alert(s);
+	return s;
+	
+};
+
+$(document).ready(function () {
+    $("#btnShowSimple").click(function (e) {
+        ShowDialog(false);
+        e.preventDefault();
+    });
+    $("#btnClose").click(function (e) {
+        HideDialog();
+        e.preventDefault();
+    });
+});
+
+function ShowDialog(modal, title, text, colour, callback) {
+    $("#overlay").show();
+    document.getElementById('dialog_title').innerHTML = title
+    document.getElementById('dialog_text').innerHTML = text
+    $("#wrapper").fadeIn(200);
+    if (modal) {
+        $("#overlay").unbind("click");
+    } else {
+        $("#overlay").click(function (e) {
+            HideDialog();
+        });
+    }
+    $('input', '#dialog_text').click(function(){
+        if(typeof callback === 'function'){
+            callback($(this).attr('x-data'));
+        }
+        HideDialog();
+    });
+}
+function HideDialog() {
+    $("#overlay").hide();
+    $("#wrapper").fadeOut(200);
+}
+
+
+
+  </script>
+  <style>
+  .web_dialog_overlay {
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		background: #000000;
+		opacity: .15;
+		filter: alpha(opacity=15);
+		z-index: 101;
+		display: none;
+	}
+	#wrapper {
+	    height: 100px;
+	    width: 500px;
+	    bottom: 50%;
+	    right: 50%;
+	    position: absolute;
+	    display: none;
+	    z-index: 102;
+	}
+	#container {
+	    left: 50%;
+	    padding: 10px;
+	    top: 50%;
+	    margin: 0;
+	    padding: 0;
+	    height: 100%;
+	    height: 100%;
+	    position: relative;
+	}
+	#dialog {
+		border-collapse: collapse;
+		width: 100%;
+		border: 1px solid #000;
+		background: #FFF;
+		border: 2px solid rgb(100,139,170);
+	}
+	#dialog td {
+		padding: 4px;
+	
+	}
+	#dialog_topbar {
+		background: rgb(100,139,170);
+		color: #FFF;
+		font-weight: bold;
+	}
+	#btnClose {
+		color: #FFF;
+	    text-decoration: none;
+	    cursor: pointer;
+	    border: 1px solid #FFF;
+	    padding-left: 3px;
+	    padding-right: 3px;
+	    padding-top: 1px;
+	    padding-bottom: 1px;
+	}
+	#dialog_text {
+		text-align: center;
+		vertical-align: middle;
+		height: 150px;
+		font-size: 11pt;
+		font-weight: bold;
+	}
+	#dialog_text a {
+		text-align: center;
+		vertical-align: middle;
+		height: 150px;
+		font-size: 11pt;
+		font-weight: bold;
+		text-decoration: none;
+		color: #000;
+	}
+  </style>
+</head>
+<body>
+  <div id="overlay" class="web_dialog_overlay"></div>
+    <div id="wrapper">
+    
+        <div id="container">
+
+			<table id="dialog">
+				<tr id="dialog_topbar">
+					<td id="dialog_title">Custom Dialog Box</td>
+					<td style="text-align: right;"><a href="" id="btnClose">X</a></td>
+				</tr>
+				<tr>
+					<td id="dialog_text" colspan="2"><!--automated text--></td>
+				</tr>
+	        </table>
+        
+        </div>
+	</div>
+
+<input type="button" value="test" onclick="test()">
+<a onclick="return test()" href="www.google.com">Click</a>
+
+</body>
+</html>
